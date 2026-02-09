@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Gestión de Residuos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a th:href="@{/dashboard}" style="background-color: #34495e;">Dashboard</a></li>
+            <li><a th:href="@{/camiones}">Camiones</a></li>
+            <li><a th:href="@{/rutas}">Rutas</a></li>
+            <li><a th:href="@{/asignaciones}">Asignaciones</a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/usuarios}">Usuarios</a></li>
+            <li class="logout">
+                <span sec:authentication="name" style="color: white; margin-right: 1rem;"></span>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" style="padding: 0.3rem 0.8rem;">Cerrar Sesión</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <div class="card">
+            <h1>Panel de Control - Centro de Gestión de Residuos</h1>
+            <p>Bienvenido, <strong sec:authentication="name"></strong></p>
+            <p>Rol: <strong sec:authentication="principal.authorities"></strong></p>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3>Camiones</h3>
+                <div class="number">5</div>
+                <a th:href="@{/camiones}" class="btn btn-primary" style="margin-top: 1rem;">Ver Camiones</a>
+            </div>
+            
+            <div class="dashboard-card">
+                <h3>Rutas</h3>
+                <div class="number">4</div>
+                <a th:href="@{/rutas}" class="btn btn-primary" style="margin-top: 1rem;">Ver Rutas</a>
+            </div>
+            
+            <div class="dashboard-card">
+                <h3>Asignaciones</h3>
+                <div class="number">6</div>
+                <a th:href="@{/asignaciones}" class="btn btn-primary" style="margin-top: 1rem;">Ver Asignaciones</a>
+            </div>
+            
+            <div class="dashboard-card" sec:authorize="hasRole('ADMIN')">
+                <h3>Usuarios</h3>
+                <div class="number">3</div>
+                <a th:href="@{/usuarios}" class="btn btn-primary" style="margin-top: 1rem;">Gestionar Usuarios</a>
+            </div>
+        </div>
+        
+        <div class="card" style="margin-top: 2rem;">
+            <h2>Funcionalidades por Rol</h2>
+            <div sec:authorize="hasRole('ADMIN')">
+                <h3 style="color: #e74c3c;"> Administrador</h3>
+                <ul>
+                    <li>- Ver listado de camiones, rutas y asignaciones</li>
+                    <li>- Crear, editar y eliminar camiones</li>
+                    <li>- Crear, editar y eliminar rutas</li>
+                    <li>- Crear y eliminar asignaciones</li>
+                    <li>- Gestionar usuarios del sistema</li>
+                </ul>
+            </div>
+            
+            <div sec:authorize="hasRole('COORDINADOR')">
+                <h3 style="color: #3498db;">Coordinador</h3>
+                <ul>
+                    <li>- Ver listado de camiones, rutas y asignaciones</li>
+                    <li>- Crear y eliminar asignaciones</li>
+                    <li>- No puede crear/editar camiones ni rutas</li>
+                    <li>- No puede gestionar usuarios</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

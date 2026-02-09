@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Asignaciones</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a th:href="@{/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/camiones}">Camiones</a></li>
+            <li><a th:href="@{/rutas}">Rutas</a></li>
+            <li><a th:href="@{/asignaciones}" style="background-color: #34495e;">Asignaciones</a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/usuarios}">Usuarios</a></li>
+            <li class="logout">
+                <span sec:authentication="name" style="color: white; margin-right: 1rem;"></span>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" style="padding: 0.3rem 0.8rem;">Cerrar Sesión</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="card">
+            <h1>Gestión de Asignaciones</h1>
+            <div style="margin-bottom: 1rem;">
+                <a th:href="@{/asignaciones/nueva}" class="btn btn-success">Nueva Asignación</a>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Camión</th>
+                        <th>Matrícula</th>
+                        <th>Estado Camión</th>
+                        <th>Ruta</th>
+                        <th>Zona</th>
+                        <th>Día</th>
+                        <th>Fecha Asignación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="asignacion : ${asignaciones}">
+                        <td th:text="${asignacion.id}">1</td>
+                        <td th:text="${asignacion.camion.modelo}">Iveco Daily</td>
+                        <td th:text="${asignacion.camion.matricula}">1234-ABC</td>
+                        <td>
+                            <span th:class="'badge badge-' + ${#strings.toLowerCase(#strings.replace(asignacion.camion.estado, '_', '_'))}" 
+                                  th:text="${asignacion.camion.estado}">DISPONIBLE</span>
+                        </td>
+                        <td th:text="${asignacion.ruta.nombre}">Ruta Centro</td>
+                        <td th:text="${asignacion.ruta.zona}">Centro</td>
+                        <td th:text="${asignacion.ruta.diaSemana}">LUNES</td>
+                        <td th:text="${#temporals.format(asignacion.fechaAsignacion, 'dd/MM/yyyy')}">15/01/2025</td>
+                        <td>
+                            <a th:href="@{/asignaciones/eliminar/{id}(id=${asignacion.id})}" 
+                               class="btn btn-danger"
+                               onclick="return confirm('¿Está seguro de eliminar esta asignación?')">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

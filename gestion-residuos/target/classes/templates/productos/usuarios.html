@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuarios</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/dashboard}">Dashboard</a></li>
+        <li><a th:href="@{/camiones}">Camiones</a></li>
+        <li><a th:href="@{/rutas}">Rutas</a></li>
+        <li><a th:href="@{/asignaciones}">Asignaciones</a></li>
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/usuarios}" style="background-color: #34495e;">Usuarios</a>
+        </li>
+        <li class="logout">
+            <span sec:authentication="name" style="color: white; margin-right: 1rem;"></span>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h1>Gestión de Usuarios</h1>
+
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Activo</th>
+                <th>Fecha creación</th>
+                <th sec:authorize="hasRole('ADMIN')">Acciones</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.id}">1</td>
+                <td th:text="${usuario.username}">admin</td>
+                <td th:text="${usuario.email}">admin@email.com</td>
+                <td th:text="${usuario.nombre}">Administrador</td>
+                <td th:text="${usuario.rol}">ADMIN</td>
+                <td>
+                    <span th:class="${usuario.activo ? 'badge badge-activa' : 'badge badge-inactiva'}"
+                          th:text="${usuario.activo ? 'Sí' : 'No'}">
+                        Sí
+                    </span>
+                </td>
+                <td th:text="${#temporals.format(usuario.fechaCreacion, 'dd/MM/yyyy HH:mm')}">
+                    01/01/2025 12:00
+                </td>
+
+                <td sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/usuarios/eliminar/{id}(id=${usuario.id})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('¿Seguro que quieres eliminar este usuario?')">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

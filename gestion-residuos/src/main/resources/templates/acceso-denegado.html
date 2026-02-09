@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Denegado - Sistema de Gestión de Residuos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="card access-denied">
+            <h1>🚫 403</h1>
+            <h2>Acceso Denegado</h2>
+            <p>No tienes permisos para acceder a esta sección del sistema.</p>
+            <p>Solo los usuarios con rol de <strong>ADMIN</strong> pueden acceder aquí.</p>
+            
+            <div style="margin-top: 2rem;">
+                <a th:href="@{/dashboard}" class="btn btn-primary">🏠 Volver al Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

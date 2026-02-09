@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Asignación</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a th:href="@{/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/camiones}">Camiones</a></li>
+            <li><a th:href="@{/rutas}">Rutas</a></li>
+            <li><a th:href="@{/asignaciones}" style="background-color: #34495e;">Asignaciones</a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/usuarios}">Usuarios</a></li>
+            <li class="logout">
+                <span sec:authentication="name" style="color: white; margin-right: 1rem;"></span>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" style="padding: 0.3rem 0.8rem;">Cerrar Sesión</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="card">
+            <h1>➕ Nueva Asignación</h1>
+            <form th:action="@{/asignaciones/crear}" method="post">
+                <div class="form-group">
+                    <label for="camionId">Camión:</label>
+                    <select id="camionId" name="camionId" required>
+                        <option value="">Seleccione un camión...</option>
+                        <option th:each="camion : ${camiones}" 
+                                th:value="${camion.id}"
+                                th:text="${camion.matricula + ' - ' + camion.modelo + ' (' + camion.estado + ')'}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rutaId">Ruta:</label>
+                    <select id="rutaId" name="rutaId" required>
+                        <option value="">Seleccione una ruta...</option>
+                        <option th:each="ruta : ${rutas}" 
+                                th:value="${ruta.id}"
+                                th:text="${ruta.nombre + ' - ' + ruta.zona + ' (' + ruta.diaSemana + ')'}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fechaAsignacion">Fecha de Asignación:</label>
+                    <input type="date" id="fechaAsignacion" name="fechaAsignacion" 
+                           th:value="${fechaActual}" required>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-success">Guardar Asignación</button>
+                    <a th:href="@{/asignaciones}" class="btn btn-danger">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

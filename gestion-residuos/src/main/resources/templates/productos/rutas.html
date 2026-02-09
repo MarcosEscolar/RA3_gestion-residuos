@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Rutas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/dashboard}">Dashboard</a></li>
+        <li><a th:href="@{/camiones}">Camiones</a></li>
+        <li><a th:href="@{/rutas}" style="background-color: #34495e;">Rutas</a></li>
+        <li><a th:href="@{/asignaciones}">Asignaciones</a></li>
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/usuarios}">Usuarios</a>
+        </li>
+        <li class="logout">
+            <span sec:authentication="name" style="color: white; margin-right: 1rem;"></span>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger" style="padding: 0.3rem 0.8rem;">
+                    Cerrar Sesión
+                </button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h1>Gestión de Rutas</h1>
+
+
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Zona</th>
+                <th>Día de la Semana</th>
+                <th>Descripción</th>
+                <th>Activa</th>
+                <th sec:authorize="hasRole('ADMIN')">Acciones</th>
+            </tr>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Zona</th>
+                <th>Día de la Semana</th>
+                <th>Activa</th>
+                <th sec:authorize="hasRole('ADMIN')">Acciones</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="ruta : ${rutas}">
+                <td th:text="${ruta.id}">1</td>
+                <td th:text="${ruta.nombre}">Ruta Centro</td>
+                <td th:text="${ruta.zona}">Centro</td>
+                <td th:text="${ruta.diaSemana}">LUNES</td>
+                <td>
+        <span th:class="${ruta.activa ? 'badge badge-activa' : 'badge badge-inactiva'}"
+              th:text="${ruta.activa ? 'Sí' : 'No'}">Sí</span>
+                </td>
+                <td sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/rutas/eliminar/{id}(id=${ruta.id})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('¿Está seguro de eliminar esta ruta?')">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
