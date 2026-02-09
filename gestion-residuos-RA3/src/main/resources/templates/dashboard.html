@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gestión de Residuos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/dashboard">🚛 Gestión de Residuos</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/camiones}">Camiones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/rutas}">Rutas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/asignaciones}">Asignaciones</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span sec:authentication="name">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><span class="dropdown-item-text" sec:authentication="authorities">Rol</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button type="submit" class="dropdown-item">Cerrar Sesión</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Bienvenido al Sistema de Gestión de Residuos</h1>
+                <div class="alert alert-info">
+                    <strong>Usuario:</strong> <span sec:authentication="name"></span><br>
+                    <strong>Rol:</strong> <span sec:authentication="authorities"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">🚛 Camiones</h5>
+                        <p class="card-text">Gestiona la flota de camiones</p>
+                        <a href="/camiones" class="btn btn-light">Ver Camiones</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">🗺️ Rutas</h5>
+                        <p class="card-text">Administra las rutas de recolección</p>
+                        <a href="/rutas" class="btn btn-light">Ver Rutas</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">📋 Asignaciones</h5>
+                        <p class="card-text">Asigna camiones a rutas</p>
+                        <a href="/asignaciones" class="btn btn-light">Ver Asignaciones</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" sec:authorize="hasRole('ADMIN')">
+            <div class="col-md-4">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">👥 Usuarios</h5>
+                        <p class="card-text">Gestiona usuarios del sistema (Solo Admin)</p>
+                        <a href="/usuarios" class="btn btn-light">Ver Usuarios</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
